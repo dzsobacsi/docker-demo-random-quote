@@ -386,3 +386,215 @@ Access at `http://localhost:8080`
 - Check firewall settings
 - Try different port
 
+---
+
+## Appendix: Additional Topics
+
+### A. Cloud Container Registries and Deployment
+
+#### What is a Container Registry?
+
+A container registry is a repository for storing and distributing Docker images. Think of it like GitHub, but for Docker images.
+
+#### Popular Cloud Container Registries
+
+1. **Docker Hub** (https://hub.docker.com/)
+   - Free tier available
+   - Public and private repositories
+   - Easy to use, widely adopted
+   - Simple push/pull commands
+
+2. **Amazon ECR (Elastic Container Registry)**
+   - Integrated with AWS services
+   - Seamless deployment to ECS, EKS, Lambda
+   - Pay-per-use pricing
+   - Strong security features
+
+3. **Google Container Registry (GCR) / Artifact Registry**
+   - Integrated with Google Cloud Platform
+   - Easy deployment to Cloud Run, GKE
+   - Good for multi-cloud strategies
+
+4. **Azure Container Registry (ACR)**
+   - Integrated with Azure services
+   - Works well with Azure Kubernetes Service
+   - Enterprise-grade security
+
+5. **GitHub Container Registry (ghcr.io)**
+   - Integrated with GitHub
+   - Free for public repositories
+   - Great for CI/CD workflows
+
+#### Easy Deployment Options
+
+Once images are in a registry, you can deploy to:
+
+- **Platform-as-a-Service (PaaS)**:
+  - Heroku (container support)
+  - Railway
+  - Render
+  - Fly.io
+  - DigitalOcean App Platform
+
+- **Container Orchestration**:
+  - AWS ECS/Fargate
+  - Google Cloud Run
+  - Azure Container Instances
+  - Kubernetes (managed services like EKS, GKE, AKS)
+
+- **Serverless Containers**:
+  - AWS Lambda (container support)
+  - Google Cloud Run
+  - Azure Container Apps
+
+#### Basic Workflow Example
+
+```bash
+# 1. Tag your image for the registry
+docker tag quote-generator username/quote-generator:latest
+
+# 2. Login to registry
+docker login
+
+# 3. Push to registry
+docker push username/quote-generator:latest
+
+# 4. Pull and run from anywhere
+docker pull username/quote-generator:latest
+docker run -p 8000:8000 username/quote-generator:latest
+```
+
+#### Benefits
+
+- **Version Control**: Tag images with versions
+- **Collaboration**: Share images with team members
+- **CI/CD Integration**: Automate builds and deployments
+- **Scalability**: Deploy to multiple environments easily
+- **Backup**: Images stored securely in the cloud
+
+---
+
+### B. Docker Use Cases in Finance and Trading
+
+Docker containers are widely used in financial services and trading due to their isolation, consistency, and scalability.
+
+#### 1. **Algorithmic Trading Systems**
+
+- **Strategy Isolation**: Each trading strategy runs in its own container
+- **Risk Management**: Isolated environments prevent one strategy from affecting others
+- **Rapid Deployment**: Deploy new strategies without affecting existing ones
+- **Backtesting**: Run multiple backtests in parallel containers
+- **Resource Control**: Limit CPU/memory per strategy
+
+**Example Use Case**:
+- Run multiple trading algorithms simultaneously
+- Each algorithm in its own container with specific dependencies
+- Easy to start/stop strategies without affecting others
+
+#### 2. **Microservices Architecture**
+
+- **Service Isolation**: Each financial service (payments, risk, reporting) in separate containers
+- **Independent Scaling**: Scale high-traffic services independently
+- **Technology Diversity**: Different services can use different tech stacks
+- **Fault Isolation**: If one service fails, others continue running
+
+**Example Services**:
+- Payment processing
+- Risk calculation engines
+- Real-time market data feeds
+- Trade execution systems
+- Compliance monitoring
+
+#### 3. **Data Processing and Analytics**
+
+- **ETL Pipelines**: Extract, Transform, Load processes in containers
+- **Batch Processing**: Run scheduled financial calculations
+- **Data Validation**: Isolated environments for data quality checks
+- **Parallel Processing**: Process large datasets across multiple containers
+
+**Example Use Cases**:
+- Daily P&L calculations
+- Regulatory reporting
+- Market data normalization
+- Portfolio analytics
+
+#### 4. **Development and Testing Environments**
+
+- **Consistent Environments**: Developers work in identical containers
+- **Quick Setup**: New developers can start immediately
+- **Test Isolation**: Each test suite runs in clean environment
+- **Integration Testing**: Test multiple services together
+
+**Benefits**:
+- "Works on my machine" → "Works everywhere"
+- Faster onboarding
+- Reproducible test results
+
+#### 5. **Compliance and Regulatory Requirements**
+
+- **Audit Trails**: Container images provide immutable snapshots
+- **Version Control**: Track exactly what code ran when
+- **Isolation**: Meet regulatory requirements for system separation
+- **Reproducibility**: Recreate exact production environment for audits
+
+#### 6. **High-Frequency Trading (HFT)**
+
+- **Low Latency**: Containers can be optimized for minimal overhead
+- **Resource Guarantees**: CPU/memory limits ensure consistent performance
+- **Rapid Deployment**: Deploy new trading logic quickly
+- **Isolation**: Prevent one trading system from impacting others
+
+#### 7. **Risk Management Systems**
+
+- **Stress Testing**: Run multiple risk scenarios in parallel
+- **Monte Carlo Simulations**: Distribute calculations across containers
+- **Real-time Risk Monitoring**: Isolated risk calculation engines
+- **Regulatory Reporting**: Consistent environments for compliance
+
+#### 8. **API Services**
+
+- **Market Data APIs**: Serve real-time and historical data
+- **Trading APIs**: Execute trades through containerized services
+- **Portfolio APIs**: Provide portfolio information
+- **Authentication Services**: Isolated security services
+
+#### Key Advantages in Finance
+
+1. **Security**: Strong isolation between applications
+2. **Compliance**: Immutable, auditable deployments
+3. **Scalability**: Handle market volatility with auto-scaling
+4. **Reliability**: Fault isolation prevents cascading failures
+5. **Speed**: Quick deployment of critical updates
+6. **Cost Efficiency**: Better resource utilization
+
+#### Real-World Example Architecture
+
+```
+┌─────────────────────────────────────────┐
+│  Load Balancer                          │
+└──────────────┬──────────────────────────┘
+               │
+    ┌──────────┴──────────┐
+    │                     │
+┌───▼────┐         ┌──────▼───┐
+│ Trading│         │ Market   │
+│ Engine │         │ Data API │
+│ (Cont.)│         │ (Cont.)  │
+└───┬────┘         └──────┬───┘
+    │                     │
+    └──────────┬──────────┘
+               │
+        ┌──────▼──────┐
+        │  Database   │
+        │  (Cont.)    │
+        └─────────────┘
+```
+
+Each service runs in its own container, allowing for:
+- Independent scaling
+- Technology flexibility
+- Easy updates
+- Fault isolation
+
+---
+
